@@ -1,0 +1,42 @@
+﻿<Window x:Class="WpfApp1.Myprofiles"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Friends" Height="500" Width="250" ResizeMode="NoResize"  Background="{x:Null}" WindowStyle="None">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0" Background="#252C31" MouseDown="DragMove">
+            <TextBlock  Width="139" Height="20" VerticalAlignment="Center" HorizontalAlignment="Left" Style="{StaticResource TextStyle}" Text="My Profiles" FontWeight="BOLD" Margin="4,0,0,5"/>
+            <Button Height="25" Width="25" Click="Exit_Click" HorizontalAlignment="Right">
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Bd" Background="Transparent">
+                            <Path x:Name="Pt" Data="M0,0 M0.2,0.2 L 0.8,0.8 M0.2,0.8 L0.8,0.2 M1,1"
+                      Stretch="Uniform" Stroke="#7E7F83" StrokeThickness="2"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Pt" Property="Stroke" Value="White"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+        </Grid>
+        <Grid Grid.Row="1" Background="#252C31">
+                <ScrollViewer VerticalScrollBarVisibility="Hidden" >
+                    <StackPanel x:Name="MyPanels" >
+                    
+                    </StackPanel>
+                </ScrollViewer>
+            <Button Cursor="Hand" Style="{StaticResource Find_Style}" x:Name="buttoner"  Click="buttoner_Click" Margin="78,445,72,10"/>
+
+        </Grid>
+    </Grid>
+</Window>
