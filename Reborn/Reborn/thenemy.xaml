@@ -22,7 +22,7 @@
         </Grid>
         <StackPanel Grid.Row="1" Background="#1D2126">
             <StackPanel>
-                <TextBlock Name="errors" Text="Player infos" HorizontalAlignment="Center" Foreground="White" FontSize="24" FontWeight="Bold"/>
+                <TextBlock Name="errors" Text="Player info" HorizontalAlignment="Center" Foreground="White" FontSize="24" FontWeight="Bold"/>
             </StackPanel>
             <StackPanel>
                 <Grid>
