@@ -48,19 +48,16 @@ namespace Reborn
                 return null;
             }
         }
-        public async void suka(string lastLine)
+        public void suka(string lastLine)
         {
             Regex regex = new Regex(@"\[U:1:\d{2,}\]");
             MatchCollection matches = regex.Matches(lastLine);
             int[] srt = string.Join("", from Match match in matches select match.Value.Replace("[U:1:", "").Replace("]", " ")).Trim().Split(' ').Select(x => int.Parse(x)).ToArray();
-            for (int i = 0; i < srt.Length - 1; i++)
-                await this.Dispatcher.BeginInvoke((Action)(() =>
-                {
+            for (int i = 0; i < 10; i++)
                     enemys(srt[i], i);
-                }
-                ));
+               
         }
-        private async void enemys(int id, int ids)
+         async void enemys(int id, int ids)
         {
             StackPanel mainstack = new StackPanel();
             Image mainimage = new Image();
@@ -87,7 +84,7 @@ namespace Reborn
                 github heroandmodes = JsonConvert.DeserializeObject<github>(values.github);
                 infoprofile infoprofile = JsonConvert.DeserializeObject<infoprofile>(infoprofile1);
                 List<ingame> ingames = JsonConvert.DeserializeObject<List<ingame>>(ingames1);
-                mainimage.Source = new BitmapImage(new Uri(infoprofile.profile.avatar));
+                mainimage.Source = new BitmapImage(new Uri(infoprofile.profile.avatarfull));
                 StackPanel wraptext = new StackPanel();
                 wraptext.Margin = new Thickness(5, 0, 0, 0);
                 TextBlock personaname = new TextBlock();
@@ -136,15 +133,12 @@ namespace Reborn
                 StackPanel hero = new StackPanel();
                 Image hero1 = new Image();
                 hero1.Margin = new Thickness(0, 0, 5, 0);
-                //System.Diagnostics.Process.Start($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[0].hero_id].name + "_sb.png");
-                //System.Diagnostics.Process.Start($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[1].hero_id].name + "_sb.png");
-                //System.Diagnostics.Process.Start($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[2].hero_id].name + "_sb.png");
-                hero1.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[0].hero_id].name + "_sb.png"));
+                hero1.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[0].hero_id].name + "_lg.png"));
                 Image hero2 = new Image();
                 hero2.Margin = new Thickness(0, 0, 5, 0);
-                hero2.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[1].hero_id].name + "_sb.png"));
+                hero2.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[1].hero_id].name + "_lg.png"));
                 Image hero3 = new Image();
-                hero3.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[2].hero_id].name + "_sb.png"));
+                hero3.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[2].hero_id].name + "_lg.png"));
                 hero.Orientation = Orientation.Horizontal;
                 TextBlock radiant = new TextBlock();
                 radiant.Style = this.FindResource("radire") as Style;
