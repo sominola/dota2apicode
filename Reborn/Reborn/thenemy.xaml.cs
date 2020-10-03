@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -21,37 +20,53 @@ namespace Reborn
         {
             InitializeComponent();
         }
-        async Task<string> https(string uri, bool use, string ip)
+        async Task<string> https(string uri)
         {
             try
             {
-                using (HttpClientHandler hch = new HttpClientHandler {Proxy = new WebProxy(ip, false), UseProxy = use })
+                using (HttpClientHandler hch = new HttpClientHandler {  UseProxy = true })
                 using (var client = new HttpClient(hch))
                     return await client.GetStringAsync(uri);
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                MessageBox.Show("Ошибка: " + e.Message+" IP: "+ip);
+                MessageBox.Show("Ошибка: " + e.Message);
                 return null;
             }
         }
-        public void suka(string lastLine)
+        async Task<string> https(string uri, string ip)
+        {
+            try
+            {
+                using (HttpClientHandler hch = new HttpClientHandler { Proxy = new WebProxy(ip, false), UseProxy = true })
+                using (var client = new HttpClient(hch))
+                    return await client.GetStringAsync(uri);
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Ошибка: " + e.Message + " IP: " + ip);
+                return null;
+            }
+        }
+        public async void suka(string lastLine)
         {
             Regex regex = new Regex(@"\[U:1:\d{2,}\]");
             MatchCollection matches = regex.Matches(lastLine);
             int[] srt = string.Join("", from Match match in matches select match.Value.Replace("[U:1:", "").Replace("]", " ")).Trim().Split(' ').Select(x => int.Parse(x)).ToArray();
-                for (int i = 0; i < srt.Length - 1; i++)
-                    enemys(srt[i].ToString(), i);
+            for (int i = 0; i < srt.Length - 1; i++)
+                await this.Dispatcher.BeginInvoke((Action)(() =>
+                {
+                    enemys(srt[i], i);
+                }
+                ));
         }
-        private async void enemys (string id, int ids)
+        private async void enemys(int id, int ids)
         {
-            string proxy1 = "51.89.32.83:3128";
-            string proxy2 = "144.76.24.153:3128";
             StackPanel mainstack = new StackPanel();
             Image mainimage = new Image();
             mainstack.Style = this.FindResource("mainstack") as Style;
-            string winrate1 = await https(values.apiurl + id + "/wl", true, proxy1);
-            string proverka1 = await https(values.apiurl + id + "/peers", true, proxy2);
+            string winrate1 = await https(values.apiurl + id + "/wl");
+            string proverka1 = await https(values.apiurl + id + "/peers");
             percent winrate = JsonConvert.DeserializeObject<percent>(winrate1);
             if (ids < 5)
                 Grid.SetRow(mainstack, ids + 1);
@@ -67,12 +82,12 @@ namespace Reborn
             }
             else
             {
-                string infoprofile1 = await https(values.apiurl + id,false, null);
-                string ingames1 = await https(values.apiurl + id + "/heroes",false,null);
+                string infoprofile1 = await https(values.apiurl + id);
+                string ingames1 = await https(values.apiurl + id + "/heroes");
                 github heroandmodes = JsonConvert.DeserializeObject<github>(values.github);
                 infoprofile infoprofile = JsonConvert.DeserializeObject<infoprofile>(infoprofile1);
                 List<ingame> ingames = JsonConvert.DeserializeObject<List<ingame>>(ingames1);
-                mainimage.Source = new BitmapImage(new Uri(infoprofile.profile.avatarmedium));
+                mainimage.Source = new BitmapImage(new Uri(infoprofile.profile.avatar));
                 StackPanel wraptext = new StackPanel();
                 wraptext.Margin = new Thickness(5, 0, 0, 0);
                 TextBlock personaname = new TextBlock();
@@ -86,8 +101,8 @@ namespace Reborn
                 name.FontSize = 14;
                 name.Text = "Country: " + infoprofile.profile.loccountrycode;
                 Image rank = new Image();
-                if(infoprofile.rank_tier != null)
-                rank.Source = new BitmapImage(new Uri($"{heroandmodes.ranks[infoprofile.rank_tier].source}"));
+                if (infoprofile.rank_tier != null)
+                    rank.Source = new BitmapImage(new Uri($"{heroandmodes.ranks[infoprofile.rank_tier].source}"));
                 else
                     rank.Source = new BitmapImage(new Uri($"https://github.com/sominola/dota2-api/blob/master/images/SeasonalRank0-0.png?raw=true"));
                 rank.Width = 100;
@@ -115,18 +130,21 @@ namespace Reborn
                 percent.Text = percents.ToString("0.##") + "%";
                 TextBlock winratetext = new TextBlock();
                 winratetext.Text = "WIN RATE";
-                winratetext.Style = this.FindResource("TextStyle") as Style;
-                winratetext.Foreground = new SolidColorBrush(Colors.Gray);
-                winratetext.HorizontalAlignment = HorizontalAlignment.Center;
+                    winratetext.Style = this.FindResource("TextStyle") as Style;
+                    winratetext.Foreground = new SolidColorBrush(Colors.Gray);
+                    winratetext.HorizontalAlignment = HorizontalAlignment.Center;
                 StackPanel hero = new StackPanel();
                 Image hero1 = new Image();
                 hero1.Margin = new Thickness(0, 0, 5, 0);
-                hero1.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[0].hero_id].name.Replace("npc_dota_hero_", "") + "_sb.png"));
+                //System.Diagnostics.Process.Start($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[0].hero_id].name + "_sb.png");
+                //System.Diagnostics.Process.Start($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[1].hero_id].name + "_sb.png");
+                //System.Diagnostics.Process.Start($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[2].hero_id].name + "_sb.png");
+                hero1.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[0].hero_id].name + "_sb.png"));
                 Image hero2 = new Image();
                 hero2.Margin = new Thickness(0, 0, 5, 0);
-                hero2.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[1].hero_id].name.Replace("npc_dota_hero_", "") + "_sb.png"));
+                hero2.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[1].hero_id].name + "_sb.png"));
                 Image hero3 = new Image();
-                hero3.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[2].hero_id].name.Replace("npc_dota_hero_", "") + "_sb.png"));
+                hero3.Source = new BitmapImage(new Uri($"http://cdn.dota2.com/apps/dota2/images/heroes/" + heroandmodes.heroes[ingames[2].hero_id].name + "_sb.png"));
                 hero.Orientation = Orientation.Horizontal;
                 TextBlock radiant = new TextBlock();
                 radiant.Style = this.FindResource("radire") as Style;
@@ -156,6 +174,7 @@ namespace Reborn
                 hero.Children.Add(hero3);
             }
         }
+
 
     }
 }

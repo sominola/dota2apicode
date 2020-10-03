@@ -13,6 +13,7 @@
         public string personaname { get; set; }
         public string avatarfull { get; set; }
         public string avatarmedium { get; set; }
+        public string avatar { get; set; }
         public string name { get; set; }
         public string loccountrycode { get; set; }
             
