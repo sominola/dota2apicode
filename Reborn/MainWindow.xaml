@@ -114,7 +114,7 @@
                                     </Grid.RowDefinitions>
                                     <StackPanel Grid.Row="1" Orientation="Horizontal" Background="#1D2126" Margin="0,0,0,5">
                                         <TextBlock Padding="6,0,3,0" Text="Date"   Width="103" Style="{StaticResource Categorymatch}"/>
-                                        <TextBlock  Text="Hero"   Width="200" Style="{StaticResource Categorymatch}"/>
+                                        <TextBlock  Text="Herо"   Width="200" Style="{StaticResource Categorymatch}"/>
                                         <TextBlock  Text="Result" Width="70" Style="{StaticResource Categorymatch}"/>
                                         <TextBlock  Text="Time"   Width="50" Style="{StaticResource Categorymatch}"/>
                                         <TextBlock  Text="MODE"   Width="auto" Style="{StaticResource Categorymatch}"/>
