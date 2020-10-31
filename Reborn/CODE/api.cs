@@ -29,7 +29,7 @@ namespace Reborn
             }
             catch (Exception e)
             {
-                MessageBox.Show("Ошибка: " + e.Message);
+                MessageBox.Show("Ошибкa: " + e.Message);
             }
             return null;
         }
