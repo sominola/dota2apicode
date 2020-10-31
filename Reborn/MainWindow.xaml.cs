@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
@@ -23,7 +24,6 @@ namespace Reborn
             //Getfriend();
             //MyProfiles();
             WatchDog();
-
 
         }
         FileSystemWatcher watcher;
@@ -53,26 +53,38 @@ namespace Reborn
             watcher.Changed += OnChanged;
             watcher.EnableRaisingEvents = true;
         }
+        public async void DispatchSome(Action action)
+        {
+            if (!Dispatcher.CheckAccess())
+              await Dispatcher.BeginInvoke(action);
+            else
+               action.Invoke();
+        }
         public async void OnChanged(object source, FileSystemEventArgs e)
         {
+
             try
             {
                 watcher.EnableRaisingEvents = false;
                 await Task.Delay(30);
-                await this.Dispatcher.BeginInvoke((Action)(() =>
-                {
-                    string lastLine = "";
-                    StreamReader r = new StreamReader(values.value + @"\game\dota\server_log.txt");
-                    while (r.EndOfStream == false)
-                        lastLine = r.ReadLine();
-                    r.Close();
-                    if (lastLine.Contains("MODE"))
+                string lastLine = "";
+                using (StreamReader readfiles = new StreamReader(values.value + @"\game\dota\server_log.txt"))
+                    while (!readfiles.EndOfStream)
+                        lastLine = await readfiles.ReadLineAsync();
+                if (lastLine.Contains("DOTA_GAMEMODE_"))
+                    DispatchSome(() =>
                     {
                         thenemy thenemy = new thenemy();
                         thenemy.Show();
                         thenemy.suka(lastLine);
-                    }
-                }));
+                    });
+
+                //await Dispatcher.BeginInvoke((Action)(() =>
+                //{
+                //    thenemy thenemy = new thenemy();
+                //    thenemy.Show();
+                //    //thenemy.suka(lastLine);
+                //}));
             }
             finally
             {
