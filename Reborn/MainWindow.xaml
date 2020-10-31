@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Reborn"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="915" Style="{StaticResource WindowStyle}" MouseDown="sidePanel_MouseDown">
+        Title="MainWindow" Height="450" Width="925" Style="{StaticResource WindowStyle}" MouseDown="sidePanel_MouseDown">
     <WindowChrome.WindowChrome >
         <WindowChrome GlassFrameThickness="0" CornerRadius="0" CaptionHeight="0" UseAeroCaptionButtons="False" ResizeBorderThickness="7"/>
     </WindowChrome.WindowChrome>
