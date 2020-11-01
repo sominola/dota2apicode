@@ -18,12 +18,13 @@ namespace Reborn
         public MainWindow()
         {
             InitializeComponent();
-            infogit();
-            keys();
-
+            //infogit();
+            //keys();
+            //thenemy thenemy = new thenemy();
+            //thenemy.Show();
             //Getfriend();
             //MyProfiles();
-            WatchDog();
+            //WatchDog();
 
         }
         FileSystemWatcher watcher;
@@ -53,7 +54,7 @@ namespace Reborn
             watcher.Changed += OnChanged;
             watcher.EnableRaisingEvents = true;
         }
-        public async void DispatchSome(Action action)
+        private async void DispatchSome(Action action)
         {
             if (!Dispatcher.CheckAccess())
               await Dispatcher.BeginInvoke(action);
